@@ -1,15 +1,18 @@
 const express = require("express");
 const Product = require("./../models/productModel.js");
+const productcontroller = require("./../controller/productController.js");
 
 const productRouter = express.Router();
 
-productRouter.post("/", async (req, res, next) => {
-  const p = await Product.create(req.body);
+productRouter
+  .route("/")
+  .post(productcontroller.createPorduct)
+  .get(productcontroller.getAllPorduct);
 
-  res.status(201).json({
-    status: "success",
-    data: p,
-  });
-});
+productRouter
+  .route("/:id")
+  .patch(productcontroller.updateProduct)
+  .delete(productcontroller.deleteProduct)
+  .get(productcontroller.getOnePorduct);
 
 module.exports = productRouter;
