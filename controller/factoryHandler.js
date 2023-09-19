@@ -1,58 +1,72 @@
-exports.createDoc = (Model) => async (req, res, next) => {
-  const curDoc = await Model.create(req.body);
+const catchAsync = require("./../feature/catchError");
+const AppError = require("./../feature/appError");
 
-  res.status(201).json({
-    status: "success",
-    data: {
-      data: curDoc,
-    },
-  });
-};
+exports.createDoc = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const curDoc = await Model.create(req.body);
 
-exports.updateDoc = (Model) => async (req, res, next) => {
-  const curDoc = await Model.findByIdAndUpdate(req.params.id, req.body, {
-    runValidators: true,
-    returnDocument: "after",
+    res.status(201).json({
+      status: "success",
+      data: {
+        data: curDoc,
+      },
+    });
   });
 
-  res.status(202).json({
-    status: "success",
-    data: {
-      data: curDoc,
-    },
+exports.updateDoc = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const curDoc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+      returnDocument: "after",
+    });
+
+    if (!curDoc) return next(new AppError("this docoment is not exist", 404));
+
+    res.status(202).json({
+      status: "success",
+      data: {
+        data: curDoc,
+      },
+    });
   });
-};
 
-exports.deleteDoc = (Model) => async (req, res, next) => {
-  const curDoc = await Model.findByIdAndDelete(req.params.id);
+exports.deleteDoc = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const curDoc = await Model.findByIdAndDelete(req.params.id);
 
-  res.status(204).json({
-    status: "success",
-    data: {
-      data: curDoc,
-    },
+    if (!curDoc) return next(new AppError("this docoment is not exist", 404));
+
+    res.status(204).json({
+      status: "success",
+      data: {
+        data: curDoc,
+      },
+    });
   });
-};
 
-exports.findAllDoc = (Model) => async (req, res, next) => {
-  const curDoc = await Model.find();
+exports.findAllDoc = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const curDoc = await Model.find();
 
-  res.status(200).json({
-    status: "success",
-    result: curDoc.length,
-    data: {
-      data: curDoc,
-    },
+    res.status(200).json({
+      status: "success",
+      result: curDoc.length,
+      data: {
+        data: curDoc,
+      },
+    });
   });
-};
 
-exports.findOneDoc = (Model) => async (req, res, next) => {
-  const curDoc = await Model.find({ _id: req.params.id });
+exports.findOneDoc = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const curDoc = await Model.find({ _id: req.params.id });
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      data: curDoc,
-    },
+    if (!curDoc) return next(new AppError("this docoment is not exist", 404));
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        data: curDoc,
+      },
+    });
   });
-};
