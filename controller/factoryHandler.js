@@ -47,7 +47,11 @@ exports.deleteDoc = (Model) =>
 
 exports.findAllDoc = (Model) =>
   catchAsync(async (req, res, next) => {
-    const feature = new APIfeatures(req.query, Model.find()).fillter().sort();
+    const feature = new APIfeatures(req.query, Model.find())
+      .fillter()
+      .sort()
+      .fields()
+      .pagination();
 
     const curDoc = await feature.responseqQuery;
 

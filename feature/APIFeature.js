@@ -25,6 +25,26 @@ class APIfeatures {
     this.responseqQuery = this.responseqQuery.sort("-avregeRate");
     return this;
   }
+
+  fields() {
+    if (this.requistQuery.fields) {
+      const selectBy = this.requistQuery.fields.split(",").join(" ");
+      console.log(selectBy);
+      this.responseqQuery = this.responseqQuery.select(selectBy);
+      return this;
+    }
+    this.responseqQuery = this.responseqQuery.select("-__v");
+    return this;
+  }
+
+  pagination() {
+    const page = Number(this.requistQuery.page) || 1;
+    const limit = Number(this.requistQuery.limit) || 100;
+    const skip = (page - 1) * limit;
+    this.responseqQuery.skip(skip).limit(limit);
+
+    return this;
+  }
 }
 
 module.exports = APIfeatures;
