@@ -1,5 +1,6 @@
 const catchAsync = require("./../feature/catchError");
 const AppError = require("./../feature/appError");
+const APIfeatures = require("./../feature/APIFeature");
 
 exports.createDoc = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -46,7 +47,9 @@ exports.deleteDoc = (Model) =>
 
 exports.findAllDoc = (Model) =>
   catchAsync(async (req, res, next) => {
-    const curDoc = await Model.find();
+    const feature = new APIfeatures(req.query, Model.find()).fillter();
+
+    const curDoc = await feature.responseqQuery;
 
     res.status(200).json({
       status: "success",
