@@ -27,6 +27,11 @@ const productSchema = mongoose.Schema({
     default: 4.5,
   },
   ratingNumber: Number,
+  category: {
+    type: String,
+    required: [true, "you must have an category for product"],
+  },
+  brand: String,
 });
 
 const Product = mongoose.model("product", productSchema);

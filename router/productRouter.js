@@ -15,4 +15,6 @@ productRouter
   .delete(productcontroller.deleteProduct)
   .get(productcontroller.getOnePorduct);
 
+productRouter.get("/search/:searchKey", productcontroller.searchProduct);
+
 module.exports = productRouter;
