@@ -26,6 +26,7 @@ const productSchema = mongoose.Schema({
     max: [5, "rate can't be greater than 5"],
     default: 4.5,
   },
+  ratingNumber: Number,
 });
 
 const Product = mongoose.model("product", productSchema);
