@@ -1,6 +1,6 @@
 const express = require("express");
 const productRouter = require("./router/productRouter.js");
-const sendingEorror = require("./controller/errorControler.js");
+const sendingEorror = require("./controller/errorController.js");
 
 const app = express();
 
