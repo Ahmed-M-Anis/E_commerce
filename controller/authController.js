@@ -38,16 +38,38 @@ exports.signUp = catchAsync(async (req, res, next) => {
 
 exports.logIn = catchAsync(async (req, res, next) => {
   const { password, email } = req.body;
-  console.log(password, email);
   if (!password || !email)
     next(
       new AppError("please provid the email and the password to log in", 400)
     );
   const curUser = await User.findOne({ email }).select("+password");
-  console.log(curUser);
 
   if ((!curUser, !(await curUser.checkPassword(password, curUser.password))))
     next(new AppError("the email or the passowd not exist", 404));
 
   sendTokn(curUser, res, 200);
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  //check if there is a token
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else next(new AppError("your not logIn ,please log in", 400));
+  // check if token is modified
+  const verifiedToken = await jwt.verify(token, process.env.TOKEN_SECURE);
+
+  // check if the account not deleted
+  const curUser = await User.findOne({ _id: verifiedToken.id });
+  if (!curUser) next(new AppError("this user is not exist"));
+
+  // check if user change his password
+  if (curUser.isPasswordChanged(verifiedToken.iat))
+    next(new AppError("user have change his password , please login again"));
+
+  req.user = curUser;
+  next();
 });

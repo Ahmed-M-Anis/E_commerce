@@ -53,6 +53,24 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) next();
+
+  this.passwordChangedAt = Date.now + 2000;
+  next();
+});
+
+userSchema.methods.isPasswordChanged = function (JWTTimestamp) {
+  if (!this.passwordChangedAt) return false;
+
+  const changedTimestamp = parseInt(
+    this.passwordChangedAt.getTime() / 1000,
+    10
+  );
+
+  return JWTTimestamp < changedTimestamp;
+};
+
 /**
  *
  * @param {string} unHashedPassword

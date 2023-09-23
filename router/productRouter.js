@@ -1,12 +1,13 @@
 const express = require("express");
 const productcontroller = require("./../controller/productController.js");
+const auth = require("./../controller/authController.js");
 
 const productRouter = express.Router();
 
 productRouter
   .route("/")
   .post(productcontroller.createPorduct)
-  .get(productcontroller.getAllPorduct);
+  .get(auth.protect, productcontroller.getAllPorduct);
 
 productRouter
   .route("/:id")
