@@ -58,18 +58,30 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-  } else next(new AppError("your not logIn ,please log in", 400));
+  } else next(new AppError("your not logIn ,please log in", 401));
   // check if token is modified
   const verifiedToken = await jwt.verify(token, process.env.TOKEN_SECURE);
 
   // check if the account not deleted
   const curUser = await User.findOne({ _id: verifiedToken.id });
-  if (!curUser) next(new AppError("this user is not exist"));
+  if (!curUser) next(new AppError("this user is not exist", 401));
 
   // check if user change his password
   if (curUser.isPasswordChanged(verifiedToken.iat))
-    next(new AppError("user have change his password , please login again"));
+    next(
+      new AppError("user have change his password , please login again", 401)
+    );
 
   req.user = curUser;
   next();
 });
+
+exports.isUserAllowedToAccess = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role))
+      next(
+        new AppError("you don't have premonitions to preform this action", 405)
+      );
+    next();
+  };
+};
