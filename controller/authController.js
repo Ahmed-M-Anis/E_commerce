@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const catchAsync = require("./../feature/catchError");
 const User = require("./../models/userModel");
 const config = require("./../config");
+const AppError = require("./../feature/appError");
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.TOKEN_SECURE, {
@@ -33,4 +34,20 @@ exports.signUp = catchAsync(async (req, res, next) => {
   });
 
   sendTokn(newUser, res, 201);
+});
+
+exports.logIn = catchAsync(async (req, res, next) => {
+  const { password, email } = req.body;
+  console.log(password, email);
+  if (!password || !email)
+    next(
+      new AppError("please provid the email and the password to log in", 400)
+    );
+  const curUser = await User.findOne({ email }).select("+password");
+  console.log(curUser);
+
+  if ((!curUser, !(await curUser.checkPassword(password, curUser.password))))
+    next(new AppError("the email or the passowd not exist", 404));
+
+  sendTokn(curUser, res, 200);
 });
