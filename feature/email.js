@@ -7,15 +7,15 @@ class Email {
     this.firstName = user.name.split(" ")[0];
     this.to = user.email;
     this.url = url;
-    this.from = `ahmed anis <"testemail31585@gmail.com">`;
+    this.from = `ahmed anis <${process.env.SENDING_GMAIL}>`;
   }
 
   newTransporter() {
     return nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "testemail31585@gmail.com",
-        pass: "wdwa hnrd vgqp uvsd",
+        user: process.env.SENDING_GMAIL,
+        pass: process.env.SENDING_GMAIL_PASS,
       },
     });
   }
