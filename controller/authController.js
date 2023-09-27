@@ -50,15 +50,19 @@ exports.logIn = catchAsync(async (req, res, next) => {
   sendTokn(curUser, res, 200);
 });
 
-exports.protect = catchAsync(async (req, res, next) => {
-  //check if there is a token
-  let token;
+const getTokenFromUser = (req, next) => {
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    return req.headers.authorization.split(" ")[1];
   } else next(new AppError("your not logIn ,please log in", 401));
+};
+
+exports.protect = catchAsync(async (req, res, next) => {
+  //check if there is a token
+  const token = getTokenFromUser(req, next);
+
   // check if token is modified
   const verifiedToken = await jwt.verify(token, process.env.TOKEN_SECURE);
 
