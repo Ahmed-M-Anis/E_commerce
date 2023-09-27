@@ -3,6 +3,7 @@ const catchAsync = require("./../feature/catchError");
 const User = require("./../models/userModel");
 const config = require("./../config");
 const AppError = require("./../feature/appError");
+const Email = require("./../feature/email.js");
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.TOKEN_SECURE, {
