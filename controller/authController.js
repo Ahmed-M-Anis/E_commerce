@@ -90,3 +90,35 @@ exports.isUserAllowedToAccess = (...roles) => {
     next();
   };
 };
+
+exports.forgetPassword = catchAsync(async (req, res, next) => {
+  const curUser = await User.findOne({ email: req.body.email });
+
+  if (!curUser)
+    next(new AppError("there is no account with this email adress", 404));
+
+  const resetToken = curUser.createResetToken();
+  await curUser.save({ validateBeforeSave: false });
+
+  try {
+    const url = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/user/resetPassword/${resetToken}`;
+
+    new Email(curUser, url).sendResetPassword();
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        data: "email is sended",
+      },
+    });
+  } catch (err) {
+    curUser.passwordResetToken = undefined;
+    curUser.resetTokenExpires = undefined;
+    await curUser.save();
+    next(new AppError("fiald to send email please try again later", 500));
+  }
+});
+
+//if(!curUser.checkPassword(req.body.password , curUser.password)) next(new AppError("wrong password"))
