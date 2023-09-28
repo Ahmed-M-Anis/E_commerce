@@ -153,3 +153,11 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.changeMyPassword = catchAsync(async (req, res, next) => {
+  req.user.password = req.body.password;
+  req.user.passwordConfirm = req.body.passwordConfirm;
+  await req.user.save();
+
+  sendTokn(req.user, res, 200);
+});
