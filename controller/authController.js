@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const catchAsync = require("./../feature/catchError");
 const User = require("./../models/userModel");
 const config = require("./../config");
@@ -121,4 +122,34 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-//if(!curUser.checkPassword(req.body.password , curUser.password)) next(new AppError("wrong password"))
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const resetToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  const curUser = await User.findOne({
+    passwordResetToken: resetToken,
+    resetTokenExpires: { $gt: Date.now() },
+  });
+
+  if (!curUser)
+    next(
+      new AppError(
+        "link have been expires ,please do forget the password again",
+        400
+      )
+    );
+
+  curUser.password = req.body.password;
+  curUser.passwordConfirm = req.body.passwordConfirm;
+  curUser.passwordResetToken = undefined;
+  curUser.resetTokenExpires = undefined;
+  curUser.save();
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: "password reseted",
+    },
+  });
+});
