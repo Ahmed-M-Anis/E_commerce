@@ -156,7 +156,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.changeMyPassword = catchAsync(async (req, res, next) => {
   const curUser = await User.findOne({ _id: req.user._id }).select("+password");
-  console.log(req.body.curPassword);
 
   if (!(await curUser.checkPassword(req.body.curPassword, curUser.password)))
     next(new AppError("worng password ,try again", 400));
