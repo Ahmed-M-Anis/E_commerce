@@ -63,6 +63,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre(/^find/, function (next) {
+  this.find({ isActive: { $ne: false } });
+  next();
+});
+
 userSchema.methods.isPasswordChanged = function (JWTTimestamp) {
   if (!this.passwordChangedAt) return false;
 
