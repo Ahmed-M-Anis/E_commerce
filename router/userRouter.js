@@ -12,7 +12,10 @@ userRouter.route("/resetPassword/:token").post(autController.resetPassword);
 userRouter.use(autController.protect);
 
 userRouter.route("/password").patch(autController.changeMyPassword);
-userRouter.delete("/", userController.deleteMyAccount);
+userRouter
+  .route("/")
+  .delete(userController.deleteMyAccount)
+  .patch(userController.updateMe);
 
 userRouter.use(autController.isUserAllowedToAccess("admin"));
 

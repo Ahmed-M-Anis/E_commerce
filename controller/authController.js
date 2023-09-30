@@ -46,7 +46,7 @@ exports.logIn = catchAsync(async (req, res, next) => {
     );
   const curUser = await User.findOne({ email }).select("+password");
 
-  if ((!curUser, !(await curUser.checkPassword(password, curUser.password))))
+  if (!curUser || !(await curUser.checkPassword(password, curUser.password)))
     next(new AppError("the email or the passowd not exist", 404));
 
   sendTokn(curUser, res, 200);
