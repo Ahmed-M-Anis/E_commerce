@@ -155,9 +155,15 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.changeMyPassword = catchAsync(async (req, res, next) => {
-  req.user.password = req.body.password;
-  req.user.passwordConfirm = req.body.passwordConfirm;
-  await req.user.save();
+  const curUser = await User.findOne({ _id: req.user._id }).select("+password");
+  console.log(req.body.curPassword);
 
-  sendTokn(req.user, res, 200);
+  if (!(await curUser.checkPassword(req.body.curPassword, curUser.password)))
+    next(new AppError("worng password ,try again", 400));
+
+  curUser.password = req.body.password;
+  curUser.passwordConfirm = req.body.passwordConfirm;
+  await curUser.save();
+
+  sendTokn(curUser, res, 200);
 });
