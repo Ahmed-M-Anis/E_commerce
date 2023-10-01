@@ -14,6 +14,8 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
     $or: [
       { name: { $regex: req.params.searchKey } },
       { brand: { $regex: req.params.searchKey } },
+      { "category.name": { $regex: req.params.searchKey } },
+      { discreption: { $regex: req.params.searchKey } },
     ],
   };
 

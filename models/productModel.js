@@ -28,7 +28,8 @@ const productSchema = mongoose.Schema({
   },
   ratingNumber: Number,
   category: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Category",
     required: [true, "you must have an category for product"],
   },
   brand: String,
