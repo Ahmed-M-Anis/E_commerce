@@ -2,7 +2,7 @@ const express = require("express");
 const productcontroller = require("./../controller/productController.js");
 const auth = require("./../controller/authController.js");
 
-const productRouter = express.Router();
+const productRouter = express.Router({ mergeParams: true });
 
 productRouter
   .route("/")

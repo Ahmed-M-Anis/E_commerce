@@ -4,6 +4,8 @@ const APIfeatures = require("./../feature/APIFeature");
 
 exports.createDoc = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (!req.body.category) req.body.category = req.params.categoryId;
+
     const curDoc = await Model.create(req.body);
 
     res.status(201).json({
@@ -16,6 +18,8 @@ exports.createDoc = (Model) =>
 
 exports.updateDoc = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (!req.body.category) req.body.category = req.params.categoryId;
+
     const curDoc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       returnDocument: "after",
@@ -47,7 +51,10 @@ exports.deleteDoc = (Model) =>
 
 exports.findAllDoc = (Model) =>
   catchAsync(async (req, res, next) => {
-    const feature = new APIfeatures(req.query, Model.find())
+    let searchOj = {};
+    if (req.params.categoryId) searchOj = { category: req.params.categoryId };
+
+    const feature = new APIfeatures(req.query, Model.find(searchOj))
       .fillter()
       .sort()
       .fields()

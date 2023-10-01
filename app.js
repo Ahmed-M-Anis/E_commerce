@@ -32,9 +32,9 @@ app.use(mongoSanitize());
 //data Sanitize protiction form xss
 app.use(xss());
 
-app.use("/api/v1/product", productRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/product", productRouter);
 
 app.all("*", (req, res, next) => next(new AppError("this URL not found", 404)));
 
