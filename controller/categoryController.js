@@ -12,8 +12,9 @@ exports.updateCategory = factory.updateDoc(Category);
 exports.deleteCategory = catchAsync(async (req, res, next) => {
   const productsToUpdate = await Product.find({ category: req.params.id });
 
-  const promises = productsToUpdate.map((product) => {
+  const promises = productsToUpdate.map(async (product) => {
     product.category = undefined;
+    await product.save({ validateBeforeSave: false });
   });
 
   await Promise.all(promises);

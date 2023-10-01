@@ -6,6 +6,7 @@ const xss = require("xss-clean");
 
 const productRouter = require("./router/productRouter.js");
 const userRouter = require("./router/userRouter.js");
+const categoryRouter = require("./router/categoryRouter.js");
 const sendingEorror = require("./controller/errorController.js");
 const config = require("./config.js");
 
@@ -33,6 +34,7 @@ app.use(xss());
 
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/category", categoryRouter);
 
 app.all("*", (req, res, next) => next(new AppError("this URL not found", 404)));
 
