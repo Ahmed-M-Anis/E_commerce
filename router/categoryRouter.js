@@ -6,8 +6,15 @@ const productRouter = require("./productRouter");
 const categoryRouter = express.Router();
 categoryRouter.use("/:categoryId/product", productRouter);
 
-categoryRouter.route("/").post(categoryController.createCategory);
+categoryRouter
+  .route("/")
+  .post(categoryController.createCategory)
+  .get(categoryController.getAllCategory);
 
-categoryRouter.route("/:id").delete(categoryController.deleteCategory);
+categoryRouter
+  .route("/:id")
+  .delete(categoryController.deleteCategory)
+  .get(categoryController.getOneCategory)
+  .patch(categoryController.updateCategory);
 
 module.exports = categoryRouter;
