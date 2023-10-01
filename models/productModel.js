@@ -43,7 +43,7 @@ const productSchema = mongoose.Schema(
 productSchema.index({ name: 1, brand: 1, price: 1, avregeRate: 1 });
 
 productSchema.pre(/^find/, function (next) {
-  this.populate({ path: "category" });
+  this.populate({ path: "category", select: "name" });
   next();
 });
 const Product = mongoose.model("product", productSchema);
