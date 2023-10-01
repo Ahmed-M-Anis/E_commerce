@@ -14,7 +14,6 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
     $or: [
       { name: { $regex: req.params.searchKey } },
       { brand: { $regex: req.params.searchKey } },
-      //{ "category.name": { $regex: req.params.searchKey } },
       { discreption: { $regex: req.params.searchKey } },
     ],
   };
@@ -26,8 +25,6 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
     .pagination();
 
   const curProducts = await feature.responseqQuery;
-
-  //const curProducts = await Product.find(searchQuery);
 
   res.status(200).json({
     status: "success",
