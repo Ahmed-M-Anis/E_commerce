@@ -53,6 +53,7 @@ exports.findAllDoc = (Model) =>
   catchAsync(async (req, res, next) => {
     let searchOj = {};
     if (req.params.categoryId) searchOj = { category: req.params.categoryId };
+    if (req.params.productId) searchOj = { product: req.params.productId };
 
     const feature = new APIfeatures(req.query, Model.find(searchOj))
       .fillter()

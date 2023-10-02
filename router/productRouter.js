@@ -1,8 +1,11 @@
 const express = require("express");
 const productcontroller = require("./../controller/productController.js");
 const auth = require("./../controller/authController.js");
+const reviewRouter = require("./reviewRouter.js");
 
 const productRouter = express.Router({ mergeParams: true });
+
+productRouter.use("/:productId/review", reviewRouter);
 
 productRouter
   .route("/")

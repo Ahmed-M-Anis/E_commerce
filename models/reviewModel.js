@@ -18,12 +18,12 @@ const reviewSchema = mongoose.Schema(
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "user",
       required: [true, "review must have user"],
     },
     product: {
       type: mongoose.Schema.ObjectId,
-      ref: "Product",
+      ref: "product",
       required: [true, "review must have product"],
     },
   },
@@ -35,4 +35,11 @@ const reviewSchema = mongoose.Schema(
 
 reviewSchema.index({ product: 1, user: 1 }, { unique: true });
 
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({ path: "user", select: "name" });
+  next();
+});
+
 const Review = mongoose.model("review", reviewSchema);
+
+module.exports = Review;
