@@ -84,3 +84,22 @@ exports.findOneDoc = (Model) =>
       },
     });
   });
+
+exports.deleteDocAndIsRef = (Model, RefTo) =>
+  catchAsync(async (req, res, next) => {
+    const docToUpdate = await Model.find({ category: req.params.id });
+
+    const promises = docToUpdate.map(async (ref) => {
+      ref.category = undefined;
+      await ref.save({ validateBeforeSave: false });
+    });
+
+    await Promise.all(promises);
+
+    await RefTo.findByIdAndDelete(req.params.id);
+
+    res.status(204).json({
+      status: "success",
+      data: { data: "docoment have been deleted" },
+    });
+  });
