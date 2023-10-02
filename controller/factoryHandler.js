@@ -96,7 +96,9 @@ exports.deleteDocAndIsRef = (Model, RefTo) =>
 
     await Promise.all(promises);
 
-    await RefTo.findByIdAndDelete(req.params.id);
+    const promises2 = RefTo.forEach(async (el) => {
+      await el.findByIdAndDelete(req.params.id);
+    });
 
     res.status(204).json({
       status: "success",

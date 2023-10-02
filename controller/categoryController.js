@@ -8,4 +8,4 @@ exports.getAllCategory = factory.findAllDoc(Category);
 exports.getOneCategory = factory.findOneDoc(Category);
 exports.updateCategory = factory.updateDoc(Category);
 
-exports.deleteCategory = factory.deleteDocAndIsRef(Product, Category);
+exports.deleteCategory = factory.deleteDocAndIsRef(Product, [Category]);
