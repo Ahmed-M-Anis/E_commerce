@@ -11,14 +11,14 @@ exports.prepareData = (req, res, next) => {
   next();
 };
 
-/* exports.isHeOwnerOfReview = catchAsync(async (req, res, next) => {
+exports.isHeOwnerOfReview = catchAsync(async (req, res, next) => {
   const curReview = await Review.findById(req.params.id);
   if (!curReview) return next(new AppError("this review is not exist", 404));
-  console.log(curReview.user._id == req.user._id);
+  console.log(curReview.user._id, req.user._id);
   if (curReview.user._id !== req.user._id)
     return next(new AppError("you can't change anther review", 404));
   next();
-}); */
+});
 
 exports.createReview = factory.createDoc(Review);
 exports.getAllReview = factory.findAllDoc(Review);

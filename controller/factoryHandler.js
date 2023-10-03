@@ -74,7 +74,7 @@ exports.findAllDoc = (Model) =>
 
 exports.findOneDoc = (Model) =>
   catchAsync(async (req, res, next) => {
-    const curDoc = await Model.find({ _id: req.params.id });
+    const curDoc = await Model.findOne({ _id: req.params.id });
 
     if (!curDoc) return next(new AppError("this docoment is not exist", 404));
 

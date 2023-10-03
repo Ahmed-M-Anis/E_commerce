@@ -46,6 +46,18 @@ productSchema.pre(/^find/, function (next) {
   this.populate({ path: "category", select: "name" });
   next();
 });
+
+productSchema.virtual("review", {
+  ref: "review",
+  foreignField: "product",
+  localField: "_id",
+});
+
+productSchema.pre("findOne", function (next) {
+  this.populate({ path: "review" });
+  next();
+});
+
 const Product = mongoose.model("product", productSchema);
 
 module.exports = Product;
