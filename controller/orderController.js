@@ -6,15 +6,31 @@ const catchAsync = require("./../feature/catchError");
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
-  const product = await Product.findById(req.params.productId);
+  const Myproduct = await Product.findById(req.params.productId);
 
-  // 2) Create checkout session
-  const Intents = await stripe.paymentIntents.create({
-    payment_method_types: ["card"],
-    amount: product.price * 100,
+  const YOUR_DOMAIN = "http://localhost:3000";
+
+  const product = await stripe.products.create({
+    name: Myproduct.name,
+  });
+
+  const price = await stripe.prices.create({
+    product: product.id,
+    unit_amount: Myproduct.price * 100,
     currency: "usd",
-    description: product.description,
-    customer: req.user._id,
+  });
+
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: price.id,
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${YOUR_DOMAIN}/success.html`,
+    cancel_url: `${YOUR_DOMAIN}/cancel.html`,
   });
 
   res.status(200).json({
