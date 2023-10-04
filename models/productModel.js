@@ -11,7 +11,7 @@ const productSchema = mongoose.Schema(
       required: [true, "product must have a price"],
       min: [0, "you can't have nigative number"],
     },
-    discreption: String,
+    description: String,
     inStock: {
       type: Number,
       required: [true, "must provid the number of product in stock"],
