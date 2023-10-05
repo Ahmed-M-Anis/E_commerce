@@ -24,7 +24,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     line_items: [
       {
         price: price.id,
-        quantity: req.body.quantity,
+        quantity: req.body.quantity || 1,
       },
     ],
     mode: "payment",
