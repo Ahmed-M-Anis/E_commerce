@@ -27,6 +27,10 @@ const orderSchema = mongoose.Schema({
     enum: ["ordered", "delevrying", "delevered"],
     default: "ordered",
   },
+  quantity: {
+    type: Number,
+    default: 1,
+  },
 });
 
 orderSchema.pre(/^find/, function (next) {
