@@ -1,39 +1,28 @@
-const stripe = require("stripe")(
-  "sk_test_51NxTRvGrqLma2Oio5gNML79jBZ5lwIXDtwy30vYSVIJB94R2kX8VFs3faJe31pmMPJQ9vWE3LmiMEGXa97d1AFvP00A8bQdBjI"
-);
-const Product = require("./../models/productModel.js");
+const Order = require("./../models/orderModel");
+const factory = require("./factoryHandler");
 const catchAsync = require("./../feature/catchError");
+const AppError = require("./../feature/appError");
 
-exports.getCheckoutSession = catchAsync(async (req, res, next) => {
-  // 1) Get the currently booked tour
-  const Myproduct = await Product.findById(req.params.productId);
+exports.prepareOrderData = (req, res, next) => {
+  if (!req.body.user) req.body.user = req.user._id;
+  if (!req.body.product) req.body.product = req.params.productId;
+  next();
+};
 
-  const YOUR_DOMAIN = "http://localhost:3000";
+exports.createOrder = factory.createDoc(Order);
+exports.getAllOrder = factory.findAllDoc(Order);
+exports.getOneOrder = factory.findOneDoc(Order);
+exports.updateOrder = factory.updateDoc(Order);
+exports.deleteOrder = factory.deleteDoc(Order);
 
-  const product = await stripe.products.create({
-    name: Myproduct.name,
-  });
-
-  const price = await stripe.prices.create({
-    product: product.id,
-    unit_amount: Myproduct.price * 100,
-    currency: "usd",
-  });
-
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        price: price.id,
-        quantity: 1,
-      },
-    ],
-    mode: "payment",
-    success_url: `${YOUR_DOMAIN}/public/success.html`,
-    cancel_url: `${YOUR_DOMAIN}/public/cancel.html`,
-  });
+exports.getAllOrderForUser = catchAsync(async (req, res, next) => {
+  const curOrder = await Order.find({ user: req.user._id });
 
   res.status(200).json({
-    status: "success",
-    session,
+    status: "seccess",
+    result: curOrder.length,
+    data: {
+      data: curOrder,
+    },
   });
 });
