@@ -3,10 +3,14 @@ const stripe = require("stripe")(
 );
 const Product = require("../models/productModel.js");
 const catchAsync = require("../feature/catchError.js");
+const AppError = require("./../feature/appError");
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked product
   const Myproduct = await Product.findById(req.params.productId);
+
+  if (Myproduct.inStock < req.body.quantity || Myproduct.inStock === 0)
+    return next(new AppError("there is no items in stock", 404));
 
   const YOUR_DOMAIN = "http://localhost:3000";
 
