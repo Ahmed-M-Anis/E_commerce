@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const cartSchema = mongoose.Schema({
-  product: [
+  products: [
     {
       product: {
         type: mongoose.Schema.ObjectId,
@@ -19,13 +19,20 @@ const cartSchema = mongoose.Schema({
     required: [true, "cart must have user"],
     unique: true,
   },
-  totalPrice: Number,
+});
+
+cartSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "products.product",
+    select: "name price description image",
+  });
+  next();
 });
 
 cartSchema.virtual("totalPrice").get(function () {
   let totalPrice = 0;
   // Iterate through the products and calculate the total price
-  for (const item of this.product) {
+  for (const item of this.products) {
     totalPrice += item.product.price * item.quantity;
   }
   return totalPrice;

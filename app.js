@@ -8,6 +8,7 @@ const productRouter = require("./router/productRouter.js");
 const userRouter = require("./router/userRouter.js");
 const categoryRouter = require("./router/categoryRouter.js");
 const orderRouter = require("./router/orderRouter.js");
+const cartRouter = require("./router/cartRouter.js");
 const sendingEorror = require("./controller/errorController.js");
 const config = require("./config.js");
 
@@ -37,6 +38,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/order", orderRouter);
+app.use("/api/v1/cart", cartRouter);
 
 app.all("*", (req, res, next) => next(new AppError("this URL not found", 404)));
 

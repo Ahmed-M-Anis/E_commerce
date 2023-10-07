@@ -9,6 +9,60 @@ exports.prepareCartData = (req, res, next) => {
   next();
 };
 
-exports.createCart = factory.createDoc(Cart);
-exports.getOneCart = factory.findOneDoc(Cart);
-exports.deleteCart = factory.deleteDoc(Cart);
+exports.addToCart = catchAsync(async (req, res, next) => {
+  let curCart = await Cart.findOne({ user: req.user._id });
+  if (!curCart) curCart = await Cart.create({ user: req.user._id });
+
+  curCart.products.push({
+    product: req.params.productId,
+    quantity: req.body.quantity,
+  });
+  await curCart.save();
+
+  res.status(200).json({
+    status: "success",
+    data: curCart,
+  });
+});
+
+exports.getMyCart = catchAsync(async (req, res, next) => {
+  const curCart = await Cart.findOne({ user: req.user._id });
+
+  res.status(200).json({
+    status: "seccess",
+    data: curCart,
+    totalPrice: curCart.totalPrice,
+  });
+});
+
+exports.removeFromCart = catchAsync(async (req, res, next) => {
+  const curCart = await Cart.findOne({ user: req.user._id });
+  const newCart = curCart.products.filter((product) => {
+    return product.product._id.toString() !== req.params.productId;
+  });
+
+  curCart.products = newCart;
+  curCart.save();
+
+  res.status(204).json({
+    status: "seccess",
+    data: curCart,
+    totalPrice: curCart.totalPrice,
+  });
+});
+
+exports.UpdateCart = catchAsync(async (req, res, next) => {
+  const curCart = await Cart.findOne({ user: req.user._id });
+
+  curCart.products.forEach((product) => {
+    if (product.product._id.toString() !== req.params.productId)
+      product.quantity = req.body.quantity;
+  });
+  await curCart.save();
+
+  res.status(200).json({
+    status: "seccess",
+    data: curCart,
+    totalPrice: curCart.totalPrice,
+  });
+});
