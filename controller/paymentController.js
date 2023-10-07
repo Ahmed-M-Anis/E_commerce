@@ -4,6 +4,7 @@ const stripe = require("stripe")(
 const Product = require("../models/productModel.js");
 const catchAsync = require("../feature/catchError.js");
 const AppError = require("./../feature/appError");
+const Cart = require("../models/cartModel.js");
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked product
@@ -31,6 +32,49 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
         quantity: req.body.quantity || 1,
       },
     ],
+    mode: "payment",
+    success_url: `${YOUR_DOMAIN}/public/success.html`,
+    cancel_url: `${YOUR_DOMAIN}/public/cancel.html`,
+  });
+
+  res.status(200).json({
+    status: "success",
+    session,
+  });
+});
+
+exports.getCheckoutSessionCart = catchAsync(async (req, res, next) => {
+  const MyCart = await Cart.findOne({ user: req.user._id });
+
+  const line_items_promises = MyCart.products.map(async (CurProduct) => {
+    if (
+      CurProduct.product.inStock < CurProduct.quantity ||
+      CurProduct.product.inStock === 0
+    )
+      return next(new AppError("there is no items in stock", 404));
+
+    const product = await stripe.products.create({
+      name: CurProduct.product.name,
+    });
+
+    const price = await stripe.prices.create({
+      product: product.id,
+      unit_amount: CurProduct.product.price * 100,
+      currency: "usd",
+    });
+
+    return {
+      price: price.id,
+      quantity: CurProduct.quantity,
+    };
+  });
+
+  const line_items = await Promise.all(line_items_promises);
+
+  const YOUR_DOMAIN = "http://localhost:3000";
+
+  const session = await stripe.checkout.sessions.create({
+    line_items,
     mode: "payment",
     success_url: `${YOUR_DOMAIN}/public/success.html`,
     cancel_url: `${YOUR_DOMAIN}/public/cancel.html`,

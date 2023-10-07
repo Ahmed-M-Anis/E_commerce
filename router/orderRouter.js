@@ -7,7 +7,7 @@ const orderRouter = express.Router({ mergeParams: true });
 
 orderRouter.use(auth.protect);
 
-orderRouter.route("/checkout").get(payment.getCheckoutSession);
+orderRouter.route("/checkout").post(payment.getCheckoutSession);
 
 orderRouter.route("/allOrders").get(orderController.getAllOrder);
 orderRouter
