@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
 
 const orderSchema = mongoose.Schema({
-  product: [
+  products: [
     {
-      type: mongoose.Schema.ObjectId,
-      ref: "product",
-      required: [true, "order must have product"],
+      product: {
+        type: mongoose.Schema.ObjectId,
+        ref: "product",
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+      },
     },
   ],
   user: {
@@ -27,18 +32,24 @@ const orderSchema = mongoose.Schema({
     enum: ["ordered", "delevrying", "delevered"],
     default: "ordered",
   },
-  quantity: {
-    type: Number,
-    default: 1,
-  },
 });
 
 orderSchema.pre(/^find/, function (next) {
   this.populate({ path: "user", select: "name phone address email" }).populate({
-    path: "product",
-    select: "name image price",
+    path: "products.product",
+    select: "name image price quantity",
   });
   next();
+});
+
+orderSchema.virtual("totalPrice").get(function () {
+  let totalPrice = 0;
+  // Iterate through the products and calculate the total price
+  for (const item of this.products) {
+    totalPrice += item.product.price * item.quantity;
+  }
+  console.log(totalPrice);
+  return totalPrice;
 });
 
 const Order = mongoose.model("order", orderSchema);

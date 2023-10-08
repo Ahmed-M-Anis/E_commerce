@@ -21,4 +21,6 @@ orderRouter
   .patch(orderController.updateOrder)
   .delete(orderController.deleteOrder);
 
+orderRouter.post("/orderCart", orderController.createOrderCart);
+
 module.exports = orderRouter;
