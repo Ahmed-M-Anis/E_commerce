@@ -32,3 +32,11 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
     data: { data: curProducts },
   });
 });
+
+exports.decreaseTheStock = async (products) => {
+  for (const product of products) {
+    const curProduct = await Product.findOne(product.product);
+    curProduct.inStock = curProduct.inStock - product.quantity;
+    await curProduct.save();
+  }
+};

@@ -12,7 +12,7 @@ orderRouter.route("/checkout").post(payment.getCheckoutSession);
 orderRouter.route("/allOrders").get(orderController.getAllOrder);
 orderRouter
   .route("/")
-  .post(orderController.prepareOrderData, orderController.createOrder)
+  .post(orderController.createOrder)
   .get(orderController.getAllOrderForUser);
 
 orderRouter
