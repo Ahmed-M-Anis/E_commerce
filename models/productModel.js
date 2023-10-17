@@ -6,11 +6,28 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, "product must have a name"],
     },
-    price: {
-      type: Number,
-      required: [true, "product must have a price"],
-      min: [0, "you can't have nigative number"],
-    },
+    price: [
+      {
+        originalPrice: {
+          type: Number,
+          required: [true, "product must have a price"],
+          min: [0, "you can't have nigative number"],
+        },
+        discount: {
+          type: Number,
+          default: 0,
+          validate: {
+            validator: function (discount) {
+              return discount < this.originalPrice;
+            },
+            massage: "discount must be less than originalPrice ",
+          },
+        },
+        finalPrice: {
+          type: Number,
+        },
+      },
+    ],
     description: String,
     inStock: {
       type: Number,
@@ -55,6 +72,12 @@ productSchema.virtual("review", {
 
 productSchema.pre("findOne", function (next) {
   this.populate({ path: "review" });
+  next();
+});
+
+productSchema.pre("save", function (next) {
+  this.price[0].finalPrice =
+    this.price[0].originalPrice - this.price[0].discount;
   next();
 });
 

@@ -46,9 +46,8 @@ orderSchema.virtual("totalPrice").get(function () {
   let totalPrice = 0;
   // Iterate through the products and calculate the total price
   for (const item of this.products) {
-    totalPrice += item.product.price * item.quantity;
+    totalPrice += item.product.price[0].finalPrice * item.quantity;
   }
-  console.log(totalPrice);
   return totalPrice;
 });
 

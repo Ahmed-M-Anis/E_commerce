@@ -9,6 +9,7 @@ const Cart = require("../models/cartModel.js");
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked product
   const Myproduct = await Product.findById(req.params.productId);
+  console.log(Myproduct.price[0].finalPrice);
 
   if (Myproduct.inStock < req.body.quantity || Myproduct.inStock === 0)
     return next(new AppError("there is no items in stock", 404));
@@ -21,7 +22,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   const price = await stripe.prices.create({
     product: product.id,
-    unit_amount: Myproduct.price * 100,
+    unit_amount: Myproduct.price[0].finalPrice * 100,
     currency: "usd",
   });
 
@@ -59,7 +60,7 @@ exports.getCheckoutSessionCart = catchAsync(async (req, res, next) => {
 
     const price = await stripe.prices.create({
       product: product.id,
-      unit_amount: CurProduct.product.price * 100,
+      unit_amount: CurProduct.product.price[0].finalPrice * 100,
       currency: "usd",
     });
 
