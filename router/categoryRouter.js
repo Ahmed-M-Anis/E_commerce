@@ -8,13 +8,23 @@ categoryRouter.use("/:categoryId/product", productRouter);
 
 categoryRouter
   .route("/")
-  .post(categoryController.createCategory)
+  .post(
+    autController.protect,
+    categoryController.uploadCategoryPhoto,
+    categoryController.resizeCategoryPhoto,
+    categoryController.createCategory
+  )
   .get(categoryController.getAllCategory);
 
 categoryRouter
   .route("/:id")
   .delete(categoryController.deleteCategory)
   .get(categoryController.getOneCategory)
-  .patch(categoryController.updateCategory);
+  .patch(
+    autController.protect,
+    categoryController.uploadCategoryPhoto,
+    categoryController.resizeCategoryPhoto,
+    categoryController.updateCategory
+  );
 
 module.exports = categoryRouter;

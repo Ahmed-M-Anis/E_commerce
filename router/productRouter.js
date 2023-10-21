@@ -11,7 +11,11 @@ productRouter.use("/:productId/order", orderRouter);
 
 productRouter
   .route("/")
-  .post(productcontroller.createPorduct)
+  .post(
+    productcontroller.uploadPorductPhoto,
+    productcontroller.resizeProductPhoto,
+    productcontroller.createPorduct
+  )
   .get(
     auth.protect,
     auth.isUserAllowedToAccess("user"),
@@ -20,7 +24,12 @@ productRouter
 
 productRouter
   .route("/:id")
-  .patch(productcontroller.updateProduct)
+  .patch(
+    auth.protect,
+    productcontroller.uploadPorductPhoto,
+    productcontroller.resizeProductPhoto,
+    productcontroller.updateProduct
+  )
   .delete(productcontroller.deleteProduct)
   .get(productcontroller.getOnePorduct);
 

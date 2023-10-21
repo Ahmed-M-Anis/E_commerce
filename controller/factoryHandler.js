@@ -1,3 +1,5 @@
+const multer = require("multer");
+const sharp = require("sharp");
 const catchAsync = require("./../feature/catchError");
 const AppError = require("./../feature/appError");
 const APIfeatures = require("./../feature/APIFeature");
@@ -105,4 +107,33 @@ exports.deleteDocAndIsRef = (Model, RefTo) =>
       status: "success",
       data: { data: "docoment have been deleted" },
     });
+  });
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("please upload only images", 400), false);
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+exports.uploadImage = () => upload.single("image");
+
+exports.resizeImage = (path, imageName) =>
+  catchAsync(async (req, res, next) => {
+    if (!req.file) return;
+
+    req.body.image = `${req.user._id}-${Date.now()}-${imageName}.jpeg`;
+
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("jpeg")
+      .jpeg({ quality: 90 })
+      .toFile(`${path}/${req.body.image}`);
+
+    next();
   });

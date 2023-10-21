@@ -8,6 +8,11 @@ exports.getAllPorduct = factory.findAllDoc(Product);
 exports.getOnePorduct = factory.findOneDoc(Product);
 exports.deleteProduct = factory.deleteDoc(Product);
 exports.updateProduct = factory.updateDoc(Product);
+exports.uploadPorductPhoto = factory.uploadImage();
+exports.resizeProductPhoto = factory.resizeImage(
+  "public/images/product",
+  "product"
+);
 
 exports.searchProduct = catchAsync(async (req, res, next) => {
   const searchQuery = {
