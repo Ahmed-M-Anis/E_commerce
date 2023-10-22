@@ -20,7 +20,9 @@
 - Express
 - MongoDB
 - Mongoose
-- JWT
+- validator
+- jsonwebtoken
+- crypto
 - bcrypt
 - Multer
 - Sharp
