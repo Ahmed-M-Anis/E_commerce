@@ -2,6 +2,8 @@
 
 #### project feature 
 
+- have roles of (admain and user)
+- have authorization and authentication
 - Products can be added
 - Category can be added
 - Brand can be added
@@ -10,6 +12,7 @@
 - Checkout
 - Have security against query injection , spam, protection form xss ,and http secury
 - Error handel
+- Send emails
 
 #### project requirement 
 
@@ -21,6 +24,7 @@
 - bcrypt
 - Multer
 - Sharp
+- validator
 - Stripe
 - nodemailer
 - express-rate-limit
