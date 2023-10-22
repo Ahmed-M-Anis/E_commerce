@@ -125,7 +125,7 @@ exports.uploadImage = () => upload.single("image");
 
 exports.resizeImage = (path, imageName) =>
   catchAsync(async (req, res, next) => {
-    if (!req.file) return;
+    if (!req.file) return next();
 
     req.body.image = `${req.user._id}-${Date.now()}-${imageName}.jpeg`;
 

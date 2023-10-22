@@ -58,7 +58,7 @@ const getTokenFromUser = (req, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     return req.headers.authorization.split(" ")[1];
-  } else next(new AppError("your not logIn ,please log in", 401));
+  } else return next(new AppError("your not logIn ,please log in", 401));
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -86,7 +86,7 @@ exports.isUserAllowedToAccess = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role))
       next(
-        new AppError("you don't have premonitions to preform this action", 405)
+        new AppError("you don't have permission to preform this action", 405)
       );
     next();
   };
