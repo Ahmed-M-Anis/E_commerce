@@ -6,9 +6,10 @@
 - Category can be added
 - Brand can be added
 - Review can be added on any product
-- cart
-- checkout
-- have security against query injection , spam, protection form xss ,and http secury
+- Cart
+- Checkout
+- Have security against query injection , spam, protection form xss ,and http secury
+- Error handel
 
 #### project requirement 
 
