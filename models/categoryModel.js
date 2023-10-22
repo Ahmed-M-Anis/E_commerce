@@ -10,7 +10,7 @@ const categorySchema = mongoose.Schema({
   image: {
     type: String,
     maxLength: 150,
-    default: "not found",
+    default: "no-image.png",
   },
 });
 

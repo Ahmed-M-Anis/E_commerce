@@ -36,7 +36,7 @@ const productSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      required: [true, "you must have an image for product"],
+      default: "no-image.png",
     },
     avregeRate: {
       type: Number,
