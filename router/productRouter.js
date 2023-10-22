@@ -12,25 +12,28 @@ productRouter.use("/:productId/order", orderRouter);
 productRouter
   .route("/")
   .post(
+    auth.protect,
+    auth.isUserAllowedToAccess("admin"),
     productcontroller.uploadPorductPhoto,
     productcontroller.resizeProductPhoto,
     productcontroller.createPorduct
   )
-  .get(
-    auth.protect,
-    auth.isUserAllowedToAccess("user"),
-    productcontroller.getAllPorduct
-  );
+  .get(productcontroller.getAllPorduct);
 
 productRouter
   .route("/:id")
   .patch(
     auth.protect,
+    auth.isUserAllowedToAccess("admin"),
     productcontroller.uploadPorductPhoto,
     productcontroller.resizeProductPhoto,
     productcontroller.updateProduct
   )
-  .delete(productcontroller.deleteProduct)
+  .delete(
+    auth.protect,
+    auth.isUserAllowedToAccess("admin"),
+    productcontroller.deleteProduct
+  )
   .get(productcontroller.getOnePorduct);
 
 productRouter.get("/search/:searchKey", productcontroller.searchProduct);
