@@ -4,6 +4,7 @@
 
 - have roles of (admain and user)
 - have authorization and authentication
+- have filters (sort , pagination , filds)
 - Products can be added
 - Category can be added
 - Brand can be added
