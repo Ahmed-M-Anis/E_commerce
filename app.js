@@ -35,7 +35,7 @@ app.use(mongoSanitize());
 app.use(xss());
 
 app.use(express.static("public"));
-app.use("/images/product", express.static("images/product"));
+app.use("/images/product", express.static("public/images/product"));
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/product", productRouter);
