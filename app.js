@@ -36,6 +36,7 @@ app.use(xss());
 
 app.use(express.static("public"));
 app.use("/images/product", express.static("public/images/product"));
+app.use("/images/category", express.static("public/images/category"));
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/product", productRouter);
