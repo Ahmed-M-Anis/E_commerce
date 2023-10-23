@@ -20,7 +20,7 @@ const sendTokn = (user, res, statusCode) => {
   if (process.env.STAGE === "production") cookieOptions.secure = true;
 
   const token = createToken(user._id);
-  res.cookie("jwt", token, cookieOptions);
+  //res.cookie("jwt", token, cookieOptions);
   res.status(statusCode).json({
     status: "success",
     token: token,
