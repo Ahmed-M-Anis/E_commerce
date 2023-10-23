@@ -3,6 +3,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+const cookieParser = require("cookie-parser");
 
 const productRouter = require("./router/productRouter.js");
 const userRouter = require("./router/userRouter.js");
@@ -33,6 +34,8 @@ app.use(mongoSanitize());
 
 //data Sanitize protiction form xss
 app.use(xss());
+
+app.use(cookieParser());
 
 app.use(express.static("public"));
 app.use("/images/product", express.static("public/images/product"));
