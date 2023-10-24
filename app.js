@@ -16,11 +16,11 @@ const config = require("./config.js");
 const app = express();
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost");
+  res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 //http secury
-app.use(helmet());
+//app.use(helmet());
 
 const limiter = rateLimit({
   max: 100,
