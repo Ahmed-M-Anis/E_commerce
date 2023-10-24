@@ -65,7 +65,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   //check if there is a token
   let token = getTokenFromUser(req, next);
   if (!token) token = req.cookies.jwt;
-  console.log(req.cookies.jwt);
 
   // check if token is modified
   const verifiedToken = await jwt.verify(token, process.env.TOKEN_SECURE);

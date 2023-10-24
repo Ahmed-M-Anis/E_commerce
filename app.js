@@ -16,7 +16,7 @@ const config = require("./config.js");
 const app = express();
 
 //http secury
-app.use(helmet());
+//app.use(helmet());
 
 const limiter = rateLimit({
   max: 100,
@@ -25,15 +25,15 @@ const limiter = rateLimit({
 });
 
 // limit the number of requist for one ip
-app.use(limiter);
+//app.use(limiter);
 
 app.use(express.json());
 
 //data Sanitize protiction form data query injection
-app.use(mongoSanitize());
+//app.use(mongoSanitize());
 
 //data Sanitize protiction form xss
-app.use(xss());
+//app.use(xss());
 
 app.use(cookieParser());
 
