@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const productRouter = require("./router/productRouter.js");
 const userRouter = require("./router/userRouter.js");
 const categoryRouter = require("./router/categoryRouter.js");
+const cors = require("cors");
 const orderRouter = require("./router/orderRouter.js");
 const cartRouter = require("./router/cartRouter.js");
 const sendingEorror = require("./controller/errorController.js");
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 });
 //http secury
 //app.use(helmet());
+app.use(cors());
 
 const limiter = rateLimit({
   max: 100,
