@@ -21,8 +21,8 @@ app.use((req, res, next) => {
   next();
 });
 //http secury
-//app.use(helmet());
 app.use(cors());
+app.use(helmet());
 
 const limiter = rateLimit({
   max: 100,
