@@ -13,7 +13,12 @@ const userSchema = mongoose.Schema({
     type: String,
     required: [true, "the user must have a email"],
     unique: true,
-    validate: validator.isEmail,
+    validate: {
+      validator: function () {
+        return validator.isEmail;
+      },
+      massage: "This Email Is Not Valid ForUse",
+    },
   },
   password: {
     type: String,

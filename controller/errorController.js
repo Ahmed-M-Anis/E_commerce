@@ -33,7 +33,7 @@ const handelIdErrorDB = (err) => {
 
 const handeDblicateErrorDB = (err) => {
   const key = err.message.match(/{([^}]+)}/g);
-  const message = `there are anther one with ${key} pls change it`;
+  const message = `This Email Has Been Used Before `;
 
   return new AppError(message, 400);
 };

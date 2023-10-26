@@ -17,7 +17,7 @@ const sendTokn = (user, res, statusCode) => {
     expires: new Date(Date.now() + config.tokenExpriresIn), // 40 day
     httpOnly: true,
   };
-  if (process.env.STAGE === "production") cookieOptions.secure = true;
+  //if (process.env.STAGE === "production") cookieOptions.secure = true;
 
   const token = createToken(user._id);
   res.cookie("jwt", token, cookieOptions);
