@@ -24,6 +24,11 @@ const sendTokn = (user, res, statusCode) => {
   res.status(statusCode).json({
     status: "success",
     token: token,
+    data: {
+      data: {
+        role: user.role,
+      },
+    },
   });
 };
 
