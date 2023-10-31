@@ -6,10 +6,14 @@ const config = require("./../config");
 const AppError = require("./../feature/appError");
 const Email = require("./../feature/email.js");
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.TOKEN_SECURE, {
-    expiresIn: config.tokenExpriresIn,
-  });
+const createToken = (user) => {
+  return jwt.sign(
+    { id: user._id, role: user.role, name: user.name },
+    process.env.TOKEN_SECURE,
+    {
+      expiresIn: config.tokenExpriresIn,
+    }
+  );
 };
 
 const sendTokn = (user, res, statusCode) => {
@@ -19,7 +23,7 @@ const sendTokn = (user, res, statusCode) => {
   };
   //if (process.env.STAGE === "production") cookieOptions.secure = true;
 
-  const token = createToken(user._id);
+  const token = createToken(user);
   res.cookie("jwt", token, cookieOptions);
   res.status(statusCode).json({
     status: "success",
