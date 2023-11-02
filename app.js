@@ -25,7 +25,7 @@ app.use(cors());
 app.use(helmet());
 
 const limiter = rateLimit({
-  max: 100,
+  max: 1000,
   windowMs: config.requistLimit,
   message: "too many request please try again after an hour",
 });
