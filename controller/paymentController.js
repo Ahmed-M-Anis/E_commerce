@@ -14,7 +14,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   if (Myproduct.inStock < req.body.quantity || Myproduct.inStock === 0)
     return next(new AppError("there is no items in stock", 404));
 
-  const YOUR_DOMAIN = "http://localhost:3000";
+  const YOUR_DOMAIN = "https://e-commerce-l194.onrender.com";
 
   const product = await stripe.products.create({
     name: Myproduct.name,
@@ -40,7 +40,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    session,
+    session: session.url,
   });
 });
 
