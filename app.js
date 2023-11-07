@@ -35,6 +35,8 @@ app.use(limiter);
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
+
 //data Sanitize protiction form data query injection
 app.use(mongoSanitize());
 
