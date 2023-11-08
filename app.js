@@ -23,7 +23,7 @@ app.use(
   })
 );
 //http secury
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
 const limiter = rateLimit({
   max: 1000,
